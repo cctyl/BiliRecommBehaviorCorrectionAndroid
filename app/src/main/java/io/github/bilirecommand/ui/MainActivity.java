@@ -73,8 +73,9 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
                         ToastUtil.show("成功");
 
                         Map<String, List<VideoVo>> data = body.getData();
-                        Collection<VideoVo> collect = data.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
-                        videoVoList.addAll(collect);
+                        videoVoList.addAll(data.getOrDefault("dislikeList", new ArrayList<>()));
+                        videoVoList.addAll(data.getOrDefault("thumbUpList", new ArrayList<>()));
+                        videoVoList.addAll(data.getOrDefault("other", new ArrayList<>()));
                         //更新数据
                         adapter.notifyItemRangeInserted(0, videoVoList.size());
                     }

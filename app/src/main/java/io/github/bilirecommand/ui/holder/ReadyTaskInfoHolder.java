@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -19,6 +20,7 @@ import io.github.bilirecommand.entity.VideoVo;
 import io.github.bilirecommand.entity.enumeration.HandleType;
 import io.github.bilirecommand.ui.adapter.CommonRecyclerViewAdapter;
 import io.github.bilirecommand.ui.function.ReadyTaskInfoFunction;
+import io.github.bilirecommand.util.GlideBlurTransformation;
 
 public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHolder<VideoVo> {
 
@@ -63,9 +65,19 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
         }
 
         //1.封面
-        Glide.with(Application.getInstance())
-                .load(videoVo.coverUrl)
-                .into(iv_video_cover);
+        if (HandleType.DISLIKE.equals(videoVo.handleType)  ){
+            Glide.with(Application.getInstance())
+                    .load(videoVo.coverUrl)
+                    .apply(RequestOptions.bitmapTransform(new GlideBlurTransformation(adapter.getContext())))
+                    .into(iv_video_cover);
+        }else {
+            Glide.with(Application.getInstance())
+                    .load(videoVo.coverUrl)
+                    .into(iv_video_cover);
+        }
+
+
+
 
         tv_up_name.setText("UP主：" + videoVo.upName);
         tv_video_title.setText("标题：" + videoVo.title);
