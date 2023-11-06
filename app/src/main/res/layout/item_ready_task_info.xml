@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp"
+    tools:background="@color/negative">
+
+    <!--
+    浅绿色：#E6F8E0
+    棕色：#a98175
+    -->
+    <ImageView
+        android:id="@+id/iv_video_cover"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/shape_cover"
+        android:src="@drawable/video_cover" />
+
+
+    <TextView
+        android:id="@+id/tv_up_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textSize="23dp"
+        tools:text="UP主：极限飞飞" />
+
+    <TextView
+        android:id="@+id/tv_video_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textSize="20dp"
+        tools:text="标题：从山顶直接飞到了停车场，定位哇塞" />
+
+    <TextView
+        android:id="@+id/tv_video_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textSize="18dp"
+        tools:text="描述：从山顶直接飞到了停车场，定位哇塞！从山顶直接飞到了停车场，定位哇塞！从山顶直接飞到了停车场，定位哇塞！" />
+
+    <TextView
+        android:id="@+id/tv_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textSize="20dp"
+        tools:text="原因：频道不感兴趣" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bt_ignore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="忽略"
+            />
+
+        <Button
+            android:id="@+id/bt_agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="同意" />
+
+        <Button
+            android:id="@+id/bt_disagree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="反转" />
+    </LinearLayout>
+</LinearLayout>
