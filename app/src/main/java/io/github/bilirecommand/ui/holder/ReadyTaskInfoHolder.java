@@ -30,9 +30,10 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
     private Button bt_agree;
     private Button bt_disagree;
 
-    public ReadyTaskInfoHolder(@NonNull View itemView) {
-        super(itemView);
+    public ReadyTaskInfoHolder(@NonNull View itemView, CommonRecyclerViewAdapter adapter) {
+        super(itemView, adapter);
     }
+
 
     @Override
     protected void saveViewIntoHolder(View itemView) {
@@ -48,16 +49,16 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
     }
 
     @Override
-    protected void setViewData(VideoVo videoVo, List<VideoVo> data) {
+    protected void setViewData(VideoVo videoVo, List<VideoVo> data,int position) {
         HandleType reversal =null;
         AtomicReference<HandleType> finalHandleType =null;
         if (HandleType.DISLIKE.equals(videoVo.handleType)){
             itemRoot.setBackgroundResource(R.color.negative);
-            tv_reason.setText(videoVo.blackReason);
+            tv_reason.setText("原因："+videoVo.blackReason);
             reversal = HandleType.THUMB_UP;
         }else {
             itemRoot.setBackgroundResource(R.color.positive);
-            tv_reason.setText(videoVo.thumbUpReason);
+            tv_reason.setText("原因："+videoVo.thumbUpReason);
             reversal = HandleType.DISLIKE;
         }
 
@@ -66,18 +67,20 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
                 .load(videoVo.coverUrl)
                 .into(iv_video_cover);
 
-        tv_up_name.setText(videoVo.upName);
-        tv_video_title.setText(videoVo.title);
-        tv_video_desc.setText(videoVo.desc);
+        tv_up_name.setText("UP主："+videoVo.upName);
+        tv_video_title.setText("标题："+videoVo.title);
+        tv_video_desc.setText("描述："+videoVo.desc);
         //忽略此视频
         bt_ignore.setOnClickListener(v -> {
            videoVo.handleType = HandleType.OTHER;
+           getAdapter().notifyItemChanged(position);
         });
 
         //反转
         HandleType finalReversal = reversal;
         bt_disagree.setOnClickListener(v -> {
             videoVo.handleType = finalReversal;
+            getAdapter().notifyItemChanged(position);
         });
     }
 }

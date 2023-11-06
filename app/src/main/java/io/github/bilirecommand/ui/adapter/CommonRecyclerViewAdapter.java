@@ -33,8 +33,8 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(resourceId, parent, false);
         try {
-            Constructor<H> constructor = viewHolderClass.getConstructor(View.class);
-            H h = constructor.newInstance(view);
+            Constructor<H> constructor = viewHolderClass.getConstructor(View.class,CommonRecyclerViewAdapter.class);
+            H h = constructor.newInstance(view,this);
             return h;
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
@@ -44,7 +44,7 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
 
     @Override
     public void onBindViewHolder(@NonNull H holder, int position) {
-        holder.setViewData(data.get(position), data);
+        holder.setViewData(data.get(position), data,position);
     }
 
     @Override
@@ -53,10 +53,17 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
     }
 
     public static abstract class InnerViewHolder<D> extends RecyclerView.ViewHolder {
-        public InnerViewHolder(@NonNull View itemView) {
+        protected CommonRecyclerViewAdapter adapter;
+        public InnerViewHolder(@NonNull View itemView,CommonRecyclerViewAdapter adapter) {
             super(itemView);
+            this.adapter = adapter;
             saveViewIntoHolder(itemView);
         }
+
+        protected CommonRecyclerViewAdapter getAdapter() {
+            return adapter;
+        }
+
         /**
          * 将itemView内部的控件保存到Holder中
          *
@@ -69,6 +76,6 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
          * @param d
          * @param data
          */
-        protected abstract void setViewData(D d, List<D> data);
+        protected abstract void setViewData(D d, List<D> data,int position);
     }
 }
