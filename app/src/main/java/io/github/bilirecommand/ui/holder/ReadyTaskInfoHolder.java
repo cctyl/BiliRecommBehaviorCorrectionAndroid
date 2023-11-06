@@ -1,5 +1,6 @@
 package io.github.bilirecommand.ui.holder;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,8 +31,8 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
     private Button bt_agree;
     private Button bt_disagree;
 
-    public ReadyTaskInfoHolder(@NonNull View itemView, CommonRecyclerViewAdapter adapter) {
-        super(itemView, adapter);
+    public ReadyTaskInfoHolder(@NonNull View itemView, CommonRecyclerViewAdapter adapter, Context context) {
+        super(itemView, adapter, context);
     }
 
 
@@ -49,16 +50,16 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
     }
 
     @Override
-    protected void setViewData(VideoVo videoVo, List<VideoVo> data,int position) {
-        HandleType reversal =null;
-        AtomicReference<HandleType> finalHandleType =null;
-        if (HandleType.DISLIKE.equals(videoVo.handleType)){
+    protected void setViewData(VideoVo videoVo, List<VideoVo> data, int position) {
+        HandleType reversal = null;
+        AtomicReference<HandleType> finalHandleType = null;
+        if (HandleType.DISLIKE.equals(videoVo.handleType)) {
             itemRoot.setBackgroundResource(R.color.negative);
-            tv_reason.setText("原因："+videoVo.blackReason);
+            tv_reason.setText("原因：" + videoVo.blackReason);
             reversal = HandleType.THUMB_UP;
-        }else {
+        } else {
             itemRoot.setBackgroundResource(R.color.positive);
-            tv_reason.setText("原因："+videoVo.thumbUpReason);
+            tv_reason.setText("原因：" + videoVo.thumbUpReason);
             reversal = HandleType.DISLIKE;
         }
 
@@ -67,20 +68,21 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
                 .load(videoVo.coverUrl)
                 .into(iv_video_cover);
 
-        tv_up_name.setText("UP主："+videoVo.upName);
-        tv_video_title.setText("标题："+videoVo.title);
-        tv_video_desc.setText("描述："+videoVo.desc);
+        tv_up_name.setText("UP主：" + videoVo.upName);
+        tv_video_title.setText("标题：" + videoVo.title);
+        tv_video_desc.setText("描述：" + videoVo.desc);
         //忽略此视频
         bt_ignore.setOnClickListener(v -> {
-           videoVo.handleType = HandleType.OTHER;
-           getAdapter().notifyItemChanged(position);
+            videoVo.handleType = HandleType.OTHER;
+            adapter.notifyItemChanged(position);
         });
+
 
         //反转
         HandleType finalReversal = reversal;
         bt_disagree.setOnClickListener(v -> {
             videoVo.handleType = finalReversal;
-            getAdapter().notifyItemChanged(position);
+            adapter.notifyItemChanged(position);
         });
     }
 }

@@ -1,5 +1,6 @@
 package io.github.bilirecommand.ui.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +21,12 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
     private List<D> data;
     private int resourceId;
     private Class<H> viewHolderClass;
-
-    public CommonRecyclerViewAdapter(List<D> data, int resourceId, Class<H> viewHolderClass) {
+    private Context context;
+    public CommonRecyclerViewAdapter(List<D> data, int resourceId, Class<H> viewHolderClass, Context context) {
         this.data = data;
         this.resourceId = resourceId;
         this.viewHolderClass = viewHolderClass;
+        this.context = context;
     }
 
     @NonNull
@@ -33,8 +35,8 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(resourceId, parent, false);
         try {
-            Constructor<H> constructor = viewHolderClass.getConstructor(View.class,CommonRecyclerViewAdapter.class);
-            H h = constructor.newInstance(view,this);
+            Constructor<H> constructor = viewHolderClass.getConstructor(View.class,CommonRecyclerViewAdapter.class,Context.class);
+            H h = constructor.newInstance(view,this,context);
             return h;
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
@@ -54,15 +56,15 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
 
     public static abstract class InnerViewHolder<D> extends RecyclerView.ViewHolder {
         protected CommonRecyclerViewAdapter adapter;
-        public InnerViewHolder(@NonNull View itemView,CommonRecyclerViewAdapter adapter) {
+        protected Context context;
+        public InnerViewHolder(@NonNull View itemView,CommonRecyclerViewAdapter adapter,Context context) {
             super(itemView);
             this.adapter = adapter;
+            this.context = context;
             saveViewIntoHolder(itemView);
         }
 
-        protected CommonRecyclerViewAdapter getAdapter() {
-            return adapter;
-        }
+
 
         /**
          * 将itemView内部的控件保存到Holder中

@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         adapter = new CommonRecyclerViewAdapter(
                 videoVoList,
                 R.layout.item_ready_task_info,
-                ReadyTaskInfoHolder.class
+                ReadyTaskInfoHolder.class,
+                this
         );
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rv_ready_handle_task.setLayoutManager(linearLayoutManager);
