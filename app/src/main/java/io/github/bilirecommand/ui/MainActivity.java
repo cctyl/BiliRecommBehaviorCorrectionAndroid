@@ -2,6 +2,7 @@ package io.github.bilirecommand.ui;
 
 import static java.security.AccessController.getContext;
 
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,14 +23,16 @@ import io.github.bilirecommand.api.RetrofitServiceCreator;
 import io.github.bilirecommand.api.SimpleCallback;
 import io.github.bilirecommand.entity.Result;
 import io.github.bilirecommand.entity.VideoVo;
+import io.github.bilirecommand.entity.enumeration.HandleType;
 import io.github.bilirecommand.ui.adapter.CommonRecyclerViewAdapter;
+import io.github.bilirecommand.ui.function.ReadyTaskInfoFunction;
 import io.github.bilirecommand.ui.holder.ReadyTaskInfoHolder;
 import io.github.bilirecommand.util.JsonUtil;
 import io.github.bilirecommand.util.ToastUtil;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunction {
 
     private static final String TAG = "MainActivity";
     private BiliRecommendService biliRecommendService;
@@ -78,5 +81,12 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
+    }
+
+    @Override
+    public void processSingleVideo(Integer aid, HandleType handleType) {
+
+
+        ToastUtil.show("处理了:"+aid+" 视频，处理结果："+handleType.name());
     }
 }

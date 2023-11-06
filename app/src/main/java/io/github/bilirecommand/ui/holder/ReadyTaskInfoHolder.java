@@ -18,6 +18,7 @@ import io.github.bilirecommand.R;
 import io.github.bilirecommand.entity.VideoVo;
 import io.github.bilirecommand.entity.enumeration.HandleType;
 import io.github.bilirecommand.ui.adapter.CommonRecyclerViewAdapter;
+import io.github.bilirecommand.ui.function.ReadyTaskInfoFunction;
 
 public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHolder<VideoVo> {
 
@@ -30,9 +31,11 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
     private Button bt_ignore;
     private Button bt_agree;
     private Button bt_disagree;
+    private ReadyTaskInfoFunction readyTaskInfoFunction;
 
-    public ReadyTaskInfoHolder(@NonNull View itemView, CommonRecyclerViewAdapter adapter, Context context) {
-        super(itemView, adapter, context);
+    public ReadyTaskInfoHolder(@NonNull View itemView, CommonRecyclerViewAdapter adapter) {
+        super(itemView, adapter);
+        this.readyTaskInfoFunction = (ReadyTaskInfoFunction) adapter.getContext();
     }
 
 
@@ -42,7 +45,7 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
         iv_video_cover = itemView.findViewById(R.id.iv_video_cover);
         tv_up_name = itemView.findViewById(R.id.tv_up_name);
         tv_video_title = itemView.findViewById(R.id.tv_video_title);
-        tv_video_desc = itemView.findViewById(R.id.tv_video_desc);
+        //tv_video_desc = itemView.findViewById(R.id.tv_video_desc);
         tv_reason = itemView.findViewById(R.id.tv_reason);
         bt_ignore = itemView.findViewById(R.id.bt_ignore);
         bt_agree = itemView.findViewById(R.id.bt_agree);
@@ -51,16 +54,12 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
 
     @Override
     protected void setViewData(VideoVo videoVo, List<VideoVo> data, int position) {
-        HandleType reversal = null;
-        AtomicReference<HandleType> finalHandleType = null;
         if (HandleType.DISLIKE.equals(videoVo.handleType)) {
             itemRoot.setBackgroundResource(R.color.negative);
-            tv_reason.setText("原因：" + videoVo.blackReason);
-            reversal = HandleType.THUMB_UP;
+            tv_reason.setText("原因：\n" + videoVo.blackReason);
         } else {
             itemRoot.setBackgroundResource(R.color.positive);
-            tv_reason.setText("原因：" + videoVo.thumbUpReason);
-            reversal = HandleType.DISLIKE;
+            tv_reason.setText("原因：\n" + videoVo.thumbUpReason);
         }
 
         //1.封面
@@ -70,19 +69,37 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
 
         tv_up_name.setText("UP主：" + videoVo.upName);
         tv_video_title.setText("标题：" + videoVo.title);
-        tv_video_desc.setText("描述：" + videoVo.desc);
+        //tv_video_desc.setText("描述：\n" + videoVo.desc);
+
         //忽略此视频
         bt_ignore.setOnClickListener(v -> {
             videoVo.handleType = HandleType.OTHER;
-            adapter.notifyItemChanged(position);
-        });
+            handleVideo(videoVo,position);
 
+        });
 
         //反转
-        HandleType finalReversal = reversal;
         bt_disagree.setOnClickListener(v -> {
-            videoVo.handleType = finalReversal;
-            adapter.notifyItemChanged(position);
+            if (HandleType.DISLIKE.equals(videoVo.handleType)) {
+                videoVo.handleType = HandleType.THUMB_UP;
+            } else {
+                videoVo.handleType = HandleType.DISLIKE;
+            }
+            handleVideo(videoVo,position);
         });
+
+        //同意
+        bt_agree.setOnClickListener(v -> {
+            handleVideo(videoVo,position);
+        });
+
     }
+
+    public void handleVideo(VideoVo v,int position){
+        adapter.getData().remove(position);
+        adapter.notifyItemRemoved(position);
+        readyTaskInfoFunction.processSingleVideo(v.aid,v.handleType);
+    }
+
+
 }

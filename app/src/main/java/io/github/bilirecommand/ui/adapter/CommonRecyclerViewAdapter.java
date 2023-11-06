@@ -29,14 +29,22 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
         this.context = context;
     }
 
+    public List<D> getData() {
+        return data;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
     @NonNull
     @Override
     public H onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(resourceId, parent, false);
         try {
-            Constructor<H> constructor = viewHolderClass.getConstructor(View.class,CommonRecyclerViewAdapter.class,Context.class);
-            H h = constructor.newInstance(view,this,context);
+            Constructor<H> constructor = viewHolderClass.getConstructor(View.class,CommonRecyclerViewAdapter.class);
+            H h = constructor.newInstance(view,this);
             return h;
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
@@ -56,11 +64,9 @@ public class CommonRecyclerViewAdapter<H extends CommonRecyclerViewAdapter.Inner
 
     public static abstract class InnerViewHolder<D> extends RecyclerView.ViewHolder {
         protected CommonRecyclerViewAdapter adapter;
-        protected Context context;
-        public InnerViewHolder(@NonNull View itemView,CommonRecyclerViewAdapter adapter,Context context) {
+        public InnerViewHolder(@NonNull View itemView,CommonRecyclerViewAdapter adapter) {
             super(itemView);
             this.adapter = adapter;
-            this.context = context;
             saveViewIntoHolder(itemView);
         }
 

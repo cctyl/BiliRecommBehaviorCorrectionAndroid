@@ -36,14 +36,14 @@
         android:textSize="20dp"
         tools:text="标题：从山顶直接飞到了停车场，定位哇塞" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_video_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:textSize="18dp"
         tools:text="描述：从山顶直接飞到了停车场，定位哇塞！从山顶直接飞到了停车场，定位哇塞！从山顶直接飞到了停车场，定位哇塞！" />
-
+-->
     <TextView
         android:id="@+id/tv_reason"
         android:layout_width="match_parent"
