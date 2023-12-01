@@ -66,16 +66,14 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
 
     private void initData() {
 
-        biliRecommendService.getReadyToHandlerTask()
-                .enqueue(new SimpleCallback<Result<Map<String, List<VideoVo>>>>() {
+        biliRecommendService.getReadyToHandlerTask(HandleType.THUMB_UP)
+                .enqueue(new SimpleCallback<Result<List<VideoVo>>>() {
                     @Override
-                    public void resp(Result<Map<String, List<VideoVo>>> body, Call<Result<Map<String, List<VideoVo>>>> call, Response<Result<Map<String, List<VideoVo>>>> response) {
+                    public void resp(Result< List<VideoVo>> body, Call<Result< List<VideoVo>>> call, Response<Result<List<VideoVo>>> response) {
                         ToastUtil.show("成功");
 
-                        Map<String, List<VideoVo>> data = body.getData();
-                        videoVoList.addAll(data.getOrDefault("dislikeList", new ArrayList<>()));
-                        videoVoList.addAll(data.getOrDefault("thumbUpList", new ArrayList<>()));
-                        videoVoList.addAll(data.getOrDefault("other", new ArrayList<>()));
+                       List<VideoVo> data = body.getData();
+                        videoVoList.addAll(data);
                         //更新数据
                         adapter.notifyItemRangeInserted(0, videoVoList.size());
                     }
@@ -86,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
 
     @Override
     public void processSingleVideo(Integer aid, HandleType handleType) {
-
-
         ToastUtil.show("处理了:"+aid+" 视频，处理结果："+handleType.name());
     }
 }

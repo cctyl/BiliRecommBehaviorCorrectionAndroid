@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitServiceCreator {
 
     private static Retrofit retrofit;
-    public static final String BASE_URL = "http://10.0.8.10:9000";
+    public static final String BASE_URL = "http://10.0.8.16:9000";
     private static final Map<Class,Object> serviceCache = new HashMap<>();
     static {
         //设置全局的请求头
