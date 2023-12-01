@@ -16,11 +16,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.github.bilirecommand.Application;
 import io.github.bilirecommand.R;
+import io.github.bilirecommand.api.SimpleCallback;
 import io.github.bilirecommand.entity.VideoVo;
 import io.github.bilirecommand.entity.enumeration.HandleType;
 import io.github.bilirecommand.ui.adapter.CommonRecyclerViewAdapter;
 import io.github.bilirecommand.ui.function.ReadyTaskInfoFunction;
 import io.github.bilirecommand.util.GlideBlurTransformation;
+import io.github.bilirecommand.util.ToastUtil;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHolder<VideoVo> {
 
@@ -108,9 +112,18 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
     }
 
     public void handleVideo(VideoVo v,int position){
-        adapter.getData().remove(position);
-        adapter.notifyItemRemoved(position);
-        readyTaskInfoFunction.processSingleVideo(v.aid,v.handleType);
+        readyTaskInfoFunction.processSingleVideo(v.id, v.handleType, new SimpleCallback() {
+            @Override
+            public void resp(Object body, Call call, Response response) {
+                //不应该根据position删除
+                adapter.getData().remove(getAdapterPosition());
+                adapter.notifyItemRemoved(getAdapterPosition());
+
+
+                ToastUtil.show("处理了:"+v.id +" 视频，处理结果："+v.handleType.name());
+            }
+        });
+
     }
 
 

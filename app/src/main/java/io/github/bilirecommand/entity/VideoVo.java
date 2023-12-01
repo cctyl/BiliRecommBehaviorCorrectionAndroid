@@ -3,6 +3,7 @@ package io.github.bilirecommand.entity;
 import io.github.bilirecommand.entity.enumeration.HandleType;
 
 public class VideoVo {
+    public String id;
     public Integer aid;
     public String bvid;
     public String title;

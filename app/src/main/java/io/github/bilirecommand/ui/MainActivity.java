@@ -2,6 +2,7 @@ package io.github.bilirecommand.ui;
 
 import static java.security.AccessController.getContext;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
     private RecyclerView rv_ready_handle_task;
     private List<VideoVo> videoVoList = new ArrayList<>();
     private CommonRecyclerViewAdapter<ReadyTaskInfoHolder, VideoVo> adapter;
+    private int page = 1;
+    private int size = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,28 +65,47 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rv_ready_handle_task.setLayoutManager(linearLayoutManager);
         rv_ready_handle_task.setAdapter(adapter);
+        rv_ready_handle_task.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int visibleItemCount = layoutManager.getChildCount();
+                int totalItemCount = layoutManager.getItemCount();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                boolean isBottom = (visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0;
+                Log.d(TAG, "firstVisibleItemPosition:"+firstVisibleItemPosition+",总数："+totalItemCount+",当前位置: "+(visibleItemCount + firstVisibleItemPosition)+",结果："+isBottom);
+                // 判断是否滚动到底部
+                if (isBottom) {
+                    // 加载下一页的逻辑
+                    page++;
+                    initData();
+                }
+            }
+        });
     }
 
     private void initData() {
-
-        biliRecommendService.getReadyToHandlerTask(HandleType.THUMB_UP)
+        biliRecommendService.getReadyToHandlerTask(HandleType.THUMB_UP, page, size)
                 .enqueue(new SimpleCallback<Result<List<VideoVo>>>() {
                     @Override
-                    public void resp(Result< List<VideoVo>> body, Call<Result< List<VideoVo>>> call, Response<Result<List<VideoVo>>> response) {
+                    public void resp(Result<List<VideoVo>> body, Call<Result<List<VideoVo>>> call, Response<Result<List<VideoVo>>> response) {
                         ToastUtil.show("成功");
 
-                       List<VideoVo> data = body.getData();
+                        List<VideoVo> data = body.getData();
                         videoVoList.addAll(data);
                         //更新数据
-                        adapter.notifyItemRangeInserted(0, videoVoList.size());
+                        adapter.notifyItemRangeInserted(videoVoList.size(), videoVoList.size());
                     }
                 });
-
-
     }
 
     @Override
-    public void processSingleVideo(Integer aid, HandleType handleType) {
-        ToastUtil.show("处理了:"+aid+" 视频，处理结果："+handleType.name());
+    public void processSingleVideo(String id, HandleType handleType, SimpleCallback callback) {
+
+        biliRecommendService.secondProcessSingleVideo(id, handleType, null).enqueue(callback);
     }
 }
