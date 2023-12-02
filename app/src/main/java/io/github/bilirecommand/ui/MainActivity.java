@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
     private CommonRecyclerViewAdapter<ReadyTaskInfoHolder, VideoVo> adapter;
     private int page = 1;
     private int size = 15;
+    private long lastRefreshTime = System.currentTimeMillis();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
                         && firstVisibleItemPosition >= 0;
                 Log.d(TAG, "firstVisibleItemPosition:"+firstVisibleItemPosition+",总数："+totalItemCount+",当前位置: "+(visibleItemCount + firstVisibleItemPosition)+",结果："+isBottom);
                 // 判断是否滚动到底部
-                if (isBottom) {
+                if (isBottom && (System.currentTimeMillis() - lastRefreshTime >2000)) {
+                    lastRefreshTime = System.currentTimeMillis();
                     // 加载下一页的逻辑
                     page++;
                     initData();
