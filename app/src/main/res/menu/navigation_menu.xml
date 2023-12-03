@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/n1"
+        android:icon="@drawable/ic_menu"
+        android:title="n1" />
+    <item
+        android:id="@+id/n2"
+        android:icon="@drawable/ic_menu"
+        android:title="n2" />
+    <item
+        android:id="@+id/n3"
+        android:icon="@drawable/ic_menu"
+        android:title="n3" />
+
+    <item android:title="其他">
+
+        <menu>
+
+            <item
+                android:id="@+id/o1"
+                android:icon="@drawable/ic_menu"
+                android:title="高级设置" />
+            <item
+                android:id="@+id/o2"
+                android:icon="@drawable/ic_menu"
+                android:title="重置" />
+
+            <item
+                android:id="@+id/o3"
+                android:icon="@drawable/ic_menu"
+                android:title="停止运行" />
+        </menu>
+    </item>
+</menu>
