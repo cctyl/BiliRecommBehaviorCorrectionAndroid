@@ -37,6 +37,7 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
     private Button bt_ignore;
     private Button bt_agree;
     private Button bt_disagree;
+    private Button bt_after_read;
     private ReadyTaskInfoFunction readyTaskInfoFunction;
 
     public ReadyTaskInfoHolder(@NonNull View itemView, CommonRecyclerViewAdapter adapter) {
@@ -56,6 +57,8 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
         bt_ignore = itemView.findViewById(R.id.bt_ignore);
         bt_agree = itemView.findViewById(R.id.bt_agree);
         bt_disagree = itemView.findViewById(R.id.bt_disagree);
+        bt_after_read = itemView.findViewById(R.id.bt_after_read);
+
     }
 
     @Override
@@ -108,6 +111,18 @@ public class ReadyTaskInfoHolder extends CommonRecyclerViewAdapter.InnerViewHold
         bt_agree.setOnClickListener(v -> {
             handleVideo(videoVo,position);
         });
+
+
+        //稍后再看
+        bt_after_read.setOnClickListener(v -> {
+            readyTaskInfoFunction.afterRead(videoVo.id, new SimpleCallback() {
+                @Override
+                public void resp(Object body, Call call, Response response) {
+                    ToastUtil.show("已添加到稍后再看");
+                }
+            });
+        });
+
 
     }
 
