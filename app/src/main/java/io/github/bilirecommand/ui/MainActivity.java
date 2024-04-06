@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +51,16 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ready_handle_task);
         biliRecommendService = RetrofitServiceCreator.create(BiliRecommendService.class);
+
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = Uri.parse("bilibili://video/1202549686?page=0");
+        intent.setData(uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            // 如果没有匹配的应用可以处理此deeplink，则可以显示错误提示或其他操作
+        }
 
         rv_ready_handle_task = findViewById(R.id.rv_ready_handle_task);
         initRecyclerView();
