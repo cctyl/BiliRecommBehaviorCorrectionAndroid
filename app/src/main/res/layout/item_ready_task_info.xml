@@ -78,5 +78,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="反转" />
+
+        <Button
+            android:id="@+id/bt_after_read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="稍后再看" />
     </LinearLayout>
 </LinearLayout>

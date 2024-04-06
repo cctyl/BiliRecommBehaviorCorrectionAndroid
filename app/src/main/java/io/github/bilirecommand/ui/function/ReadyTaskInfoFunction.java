@@ -6,4 +6,6 @@ import io.github.bilirecommand.entity.enumeration.HandleType;
 public interface ReadyTaskInfoFunction {
 
     void processSingleVideo(String id, HandleType handleType, SimpleCallback callback);
+
+    void afterRead(String id,  SimpleCallback callback);
 }

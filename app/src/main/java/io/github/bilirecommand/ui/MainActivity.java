@@ -119,7 +119,12 @@ public class MainActivity extends AppCompatActivity implements ReadyTaskInfoFunc
 
     @Override
     public void processSingleVideo(String id, HandleType handleType, SimpleCallback callback) {
-
         biliRecommendService.secondProcessSingleVideo(id, handleType, null).enqueue(callback);
+    }
+
+
+    @Override
+    public void afterRead(String id, SimpleCallback callback) {
+        biliRecommendService.afterRead(id).enqueue(callback);
     }
 }
